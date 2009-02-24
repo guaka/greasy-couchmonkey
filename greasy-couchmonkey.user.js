@@ -69,6 +69,9 @@ function letsJQuery() {
     $('#nlogobg').hide();
     $('#cornerimg').hide();
 
+    //add something!
+    $('table:eq(1) tbody tr td:first').html('CouchSurfing - <a href="http://software.guaka.org/greasy-couchmonkey">greasy couchmonkey</a>');
+
     //remove anything linking to "verification" page
     $("a[href='verification.html?step=level_info']").hide();
 

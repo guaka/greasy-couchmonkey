@@ -13,7 +13,10 @@ Future ideas:
  * decent trust metrics
  * add more! 
 
+TODO:
+ * persistent data
+ * ditch jQuery dependency
+
 Links:
  * http://github.com/guaka/greasy-couchmonkey/
  * http://couchsurfing.com/people/guaka
- * http://www.opencouchsurfing.org/wiki/Greasemonkey_wishlist

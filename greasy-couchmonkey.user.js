@@ -24,6 +24,7 @@
 // @namespace     http://guaka.org/projects/greasemonkey/
 // @description   closer to guaka's idea of how couchsurfing.com should look and function
 // @include       http://*couchsurfing.com/*
+// @include       https://*couchsurfing.com/*
 // ==/UserScript==
 
 
@@ -44,53 +45,79 @@ GM_wait();
 function letsJQuery() {
     //alert($); // check if the dollar (jquery) function works
 
-    // improve layout
-    $('body').css('background', '#eee');
-    $('body').removeAttr('background');
+    //group killfile!
+    if (path == '/group_read.html') {
+
+	// somehow we have to figure out how to make data persistent
+	// cookies?  xhr to some other site?
+	var killfile = [
+		'Major CS Group Troll Figure #1',
+		'Major CS Group Troll Figure #2',
+		'Major CS Group Troll Figure #3',
+	]
+	for (var i=0; i < killfile.length; i++) { 
+ 	    $("div a:contains('" +  killfile[i] + "')").parent().parent().parent().hide();
+        }
+    }
+
+
+    // improve layout - all pages
     $('table tr:first').hide();
+    $('body').removeAttr('background');
+    $('body').css('background', '#eee');
     
-    /*
     $('#nlogobg').hide();
     $('#cornerimg').hide();
-    $('a:contains("Help make CouchSurfing more secure")').hide();
-    $('a:contains("Visit the Surf Shop")').hide();
-    */
-    //if on home page...
+
+    //remove anything linking to "verification" page
+    $("a[href='verification.html?step=level_info']").hide();
+
+    //page specific improvements
+    var path = window.location.pathname;
+
+    //on home page...
+    if (path == '/home.html' || path == '/') {
+
+        // Hide getting verified box on home page
+      	$('div.communitybox:first').hide();
+    	$('div.generalbox:contains("CS Tips")').hide();
+    	$('div.personalbox:contains("referrals")').hide();
+    	$('div.generalbox:contains("Other useful information")').hide();
+    	$('strong:contains("Bandwidth")').hide();
     
-    // Hide getting verified box on home page
-    $('div.communitybox:first').hide();
-    $('div.generalbox:contains("CS Tips")').hide();
-    $('div.personalbox:contains("referrals")').hide();
-    $('div.generalbox:contains("Other useful information")').hide();
-    $('strong:contains("Bandwidth")').hide();
-    
-    // Hide 10 tips
-    $('div.generalbox:last').hide();
-    
+    	// Hide 10 tips
+    	$('div.generalbox:last').hide();
+    }    
     
     //if on search page
-    $('td td:contains("More information on vouching")').hide();
-    $('td td:contains("More information on verification")').hide();
-    $('td td:contains("Vouched")').hide();
-    $('td td:contains("Verification Level")').hide();
-    $('td td:contains("Ambassadors")').hide();
-    $('div.form_intro').hide();
-    
+    if (path == '/mapsurf.html') {
+    	
+	$('div.generalbox div.paddingbox').parent().hide();
+
+    	$('td td:contains("More information on vouching")').hide();
+    	$('td td:contains("More information on verification")').hide();
+    	$('td td:contains("Vouched")').hide();
+    	$('td td:contains("Verification Level")').hide();
+    	$('td td:contains("Ambassadors")').hide();
+    	$('div.form_intro').hide();
+    }
+
     //if on profile page
-    // profile
-    $('h2:contains("General Information")').hide().parent().parent().parent().parent()
-	.css('background', '#f5f5f5')
-	.css('-moz-border-radius-topleft', '0.8em')
-	.css('-moz-border-radius-topright', '0.8em')
+    if (path == '/profile.html' || path.split('/')[1] == 'people' || path == '/mapsurf.html') {
+    	$('h2:contains("General Information")').hide().parent().parent().parent().parent()
+	    .css('background', '#f5f5f5')
+	    .css('-moz-border-radius-topleft', '0.8em')
+	    .css('-moz-border-radius-topright', '0.8em')
 	;
-    $('div.iconbox').hide();
-    $("a:contains('Verified')").hide();
-    $('h3:contains("Designations")').hide();
-    //$('div.reference_to').show();  hide picture of profile you're visiting
-    
-    //group killfile!
-    // $("div a:contains('Super Troll')").parent().parent().parent().hide();
+    	$('div.iconbox').hide();
+	$('font:contains("language barrier exists")').hide();
+    	$('h3:contains("Designations")').hide();
+    	//TODO: $('div.reference_to').show();  hide picture of profile you're visiting
+    }
+
+
 }
+
 
 
 

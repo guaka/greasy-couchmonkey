@@ -1,7 +1,7 @@
 
-// Guaka's CouchSurfing mods
-// version 0.1 BETA!
-// 2009-02-18
+// Greasy Couchmonkey
+// version 0.1.1 BETA!
+// 2009-02-24
 // Copyright (c) 2009, Kasper Souren
 // Released under the GPL license
 // http://www.gnu.org/copyleft/gpl.html
@@ -20,8 +20,8 @@
 // --------------------------------------------------------------------
 //
 // ==UserScript==
-// @name          Guaka's CouchSurfing Mod
-// @namespace     http://guaka.org/projects/greasemonkey/
+// @name          Greasy Couchmonkey
+// @namespace     http://software.guaka.org/greasy-couchmonkey/
 // @description   closer to guaka's idea of how couchsurfing.com should look and function
 // @include       http://*couchsurfing.com/*
 // @include       https://*couchsurfing.com/*

@@ -25,7 +25,6 @@
 // @description   closer to guaka's idea of how couchsurfing.com should look and function
 // @include       http://*couchsurfing.com/*
 // @include       https://*couchsurfing.com/*
-// @exclude       https://wiki.couchsurfing.com/*
 // ==/UserScript==
 
 
@@ -42,23 +41,58 @@ function GM_wait() {
 }
 GM_wait();
 
+
 // All your GM code must be inside this function
 function letsJQuery() {
     //alert($); // check if the dollar (jquery) function works
 
+    killfile = eval(GM_getValue('gcm-killfile', '[]')); 
+
+    var path = window.location.pathname;
+
     //group killfile!
     if (path == '/group_read.html') {
 
-	// somehow we have to figure out how to make data persistent
-	// cookies?  xhr to some other site?
-	var killfile = [
-		'Major CS Group Troll Figure #1',
-		'Major CS Group Troll Figure #2',
-		'Major CS Group Troll Figure #3',
-	]
-	for (var i=0; i < killfile.length; i++) { 
- 	    $("div a:contains('" +  killfile[i] + "')").parent().parent().parent().hide();
+	// restores the value if saved or an empty array
+	killfile = eval(GM_getValue('gcm-killfile', '[]')); 
+	
+	alert(uneval(killfile));
+
+	save_killfile = function(killfile) {	
+	    // saves it in about:config
+	    alert(uneval(killfile));
+	    GM_setValue('gcm-killfile', uneval(killfile));
         }
+
+	remove_element = function(orig_array, element) {
+	    output = Array();
+	    for (var i = 0; i < orig_array.length; i++) {
+		if (orig_array[i] != element) {
+		    output.push(orig_array[i]);
+		}
+	    }
+	    return output;
+	}
+
+	delete_posts = function(post_name) {
+	    element = $("div.meta:has(a:contains('" + post_name + "'))").parent(); 
+	    element.find(".userthumb, .buttons, .description").hide("fast");
+	    element.append('<a class="gcm-unblock">unblock</a>');
+	    element_unblock = element.find('a.gcm-unblock');
+	    element_unblock.bind('click', function(e) {
+		    alert(uneval(e));
+		    element.find(".userthumb, .buttons, .description").show();
+		    element_unblock.hide();
+		    killfile = remove_element(killfile, post_name);
+		    save_killfile(killfile);
+		})
+	    return element;
+	}
+
+	for (var i=0; i < killfile.length; i++) { 
+	    delete_posts(killfile[i]);
+	}
+        //save_killfile(killfile);
     }
 
 
@@ -70,14 +104,10 @@ function letsJQuery() {
     $('#nlogobg').hide();
     $('#cornerimg').hide();
 
-    //add something!
     $('table:eq(1) tbody tr td:first').html('CouchSurfing - <a href="http://software.guaka.org/greasy-couchmonkey">greasy couchmonkey</a>');
 
     //remove anything linking to "verification" page
     $("a[href='verification.html?step=level_info']").hide();
-
-    //page specific improvements
-    var path = window.location.pathname;
 
     //on home page...
     if (path == '/home.html' || path == '/') {

@@ -25,6 +25,7 @@
 // @description   closer to guaka's idea of how couchsurfing.com should look and function
 // @include       http://*couchsurfing.com/*
 // @include       https://*couchsurfing.com/*
+// @exclude       https://wiki.couchsurfing.com/*
 // ==/UserScript==
 
 

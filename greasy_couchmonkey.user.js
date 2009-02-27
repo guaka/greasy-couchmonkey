@@ -56,11 +56,11 @@ function letsJQuery() {
 	// restores the value if saved or an empty array
 	killfile = eval(GM_getValue('gcm-killfile', '[]')); 
 	
-	alert(uneval(killfile));
+	// alert(uneval(killfile));
 
 	save_killfile = function(killfile) {	
 	    // saves it in about:config
-	    alert(uneval(killfile));
+	    // alert(uneval(killfile));
 	    GM_setValue('gcm-killfile', uneval(killfile));
         }
 
@@ -80,7 +80,7 @@ function letsJQuery() {
 	    element.append('<a class="gcm-unblock">unblock</a>');
 	    element_unblock = element.find('a.gcm-unblock');
 	    element_unblock.bind('click', function(e) {
-		    alert(uneval(e));
+		    // alert(uneval(e));
 		    element.find(".userthumb, .buttons, .description").show();
 		    element_unblock.hide();
 		    killfile = remove_element(killfile, post_name);

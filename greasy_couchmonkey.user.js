@@ -42,57 +42,83 @@ function GM_wait() {
 GM_wait();
 
 
+
+
 // All your GM code must be inside this function
 function letsJQuery() {
     //alert($); // check if the dollar (jquery) function works
 
-    killfile = eval(GM_getValue('gcm-killfile', '[]')); 
-
     var path = window.location.pathname;
+
+
 
     //group killfile!
     if (path == '/group_read.html') {
 
-	// restores the value if saved or an empty array
-	killfile = eval(GM_getValue('gcm-killfile', '[]')); 
+	window.killfile_get = function() {
+	    // restores the value if saved or an empty array
+	    return eval(GM_getValue('gcm-killfile', '[]')); 
+	}
 	
-	// alert(uneval(killfile));
-
-	save_killfile = function(killfile) {	
+	window.killfile_save = function(killfile_to_save) {	
 	    // saves it in about:config
-	    // alert(uneval(killfile));
-	    GM_setValue('gcm-killfile', uneval(killfile));
+	    GM_setValue('gcm-killfile', uneval(killfile_to_save));
+	    return killfile_to_save;
         }
 
-	remove_element = function(orig_array, element) {
-	    output = Array();
-	    for (var i = 0; i < orig_array.length; i++) {
-		if (orig_array[i] != element) {
-		    output.push(orig_array[i]);
-		}
+
+	window.killfile_remove = function(name) {
+	    Array.prototype.remove = function(s) {
+		var i = this.indexOf(s);
+		if (this.indexOf(s) != -1)
+		    this.splice(i, 1);
 	    }
-	    return output;
+	    var kf = window.killfile_get();
+	    kf.remove(name);
+	    window.killfile_save($f);
+	}
+
+	window.killfile_add = function(name) {
+	    var kf = window.killfile_get();
+	    kf.push(name);
+	    window.killfile_save(kf);
+	}
+
+	get_userposts = function(post_name) {
+	    // helper
+	    return $("div.meta:has(a:contains('" + post_name + "'))").parent();
 	}
 
 	delete_posts = function(post_name) {
-	    element = $("div.meta:has(a:contains('" + post_name + "'))").parent(); 
-	    element.find(".userthumb, .buttons, .description").hide("fast");
-	    element.append('<a class="gcm-unblock">unblock</a>');
-	    element_unblock = element.find('a.gcm-unblock');
-	    element_unblock.bind('click', function(e) {
-		    // alert(uneval(e));
-		    element.find(".userthumb, .buttons, .description").show();
-		    element_unblock.hide();
-		    killfile = remove_element(killfile, post_name);
-		    save_killfile(killfile);
+	    var posts = get_userposts(post_name);
+	    posts.find(".gcm-block, .userthumb, .buttons, .description").hide("fast");
+	    posts.append('<a href="#' + post_name + '" class="gcm-unblock-' + post_name + '">unblock</a>');
+	    unblock_anchors = posts.find('a.gcm-unblock-' + post_name);
+	    unblock_anchors.bind('click', function(e) {
+		    unblock_name = e.target.hash.substring(1);
+		    posts = get_userposts(unblock_name);
+		    posts.find(".gcm-unblock-" + unblock_name).hide("fast");
+		    posts.find(".gcm-block, .userthumb, .buttons, .description").show("slow");
+		    
+		    window.killfile_remove(unblock_name);
 		})
-	    return element;
+	    return posts;
 	}
 
+	// TODO: should look like link without the #gcm-nowhere crap
+	$("div.meta:has(a)").append('<a href="#gcm-nowhere" class="gcm-block">block</a>')
+	    .bind('click', function(event) {
+		    // alert(uneval(event.target.href));
+		    var $target = $(event.target);
+		    block_name = $target.parent().parent().find("div.meta a:first")[0].innerHTML;
+		    delete_posts(block_name);
+		    window.killfile_add(block_name);
+		});
+
+	killfile = get_killfile();
 	for (var i=0; i < killfile.length; i++) { 
 	    delete_posts(killfile[i]);
 	}
-        //save_killfile(killfile);
     }
 
 

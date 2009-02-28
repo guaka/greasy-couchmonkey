@@ -115,7 +115,7 @@ function letsJQuery() {
 		    window.killfile_add(block_name);
 		});
 
-	killfile = get_killfile();
+	killfile = window.killfile_get();
 	for (var i=0; i < killfile.length; i++) { 
 	    delete_posts(killfile[i]);
 	}

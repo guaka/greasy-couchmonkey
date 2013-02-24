@@ -1,8 +1,8 @@
-** Check out http://www.csberlin.com/browser-plugin for an actively maintained plugin **
+**Check out http://www.csberlin.com/browser-plugin for an actively maintained plugin**
 
 
 Greasy Couchmonkey
-
+==================
 
 Guaka's mods to couchsurfing.
 
